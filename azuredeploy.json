@@ -77,7 +77,6 @@
     "variables": {
         "hostingPlanName": "[concat(parameters('resourcePrefix'), '-plan')]",
         "storageAccountName": "[concat(parameters('resourcePrefix'), 'str')]",
-        "websiteName": "[concat(parameters('resourcePrefix'), '-site')]",
         "appInsightsName": "[concat(parameters('resourcePrefix'), '-app-insights')]",
         "searchServiceName": "[concat(parameters('resourcePrefix'), '-search-service')]",
         "cognitiveServicesAccountName": "[concat(parameters('resourcePrefix'), '-cognitive-services')]",
@@ -114,18 +113,6 @@
             "sku": {
                 "name": "[parameters('storageAccountType')]",
                 "tier": "Standard"
-            }
-        },
-        {
-            "apiVersion": "2016-08-01",
-            "name": "[variables('websiteName')]",
-            "type": "Microsoft.Web/sites",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
-            ],
-            "properties": {
-                "serverFarmId": "[variables('hostingPlanName')]"
             }
         },
         {
