@@ -193,10 +193,6 @@
                             "value": "[reference(resourceId('microsoft.insights/components/', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
                         },
                         {
-                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference('microsoft.insights/components/linux-python-function-app', '2015-05-01').ConnectionString]"
-                        },
-                        {
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('storageAccountName'),';AccountKey=',listkeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').key1, ';')]"
                         },
