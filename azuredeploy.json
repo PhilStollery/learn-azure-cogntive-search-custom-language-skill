@@ -102,9 +102,12 @@
             "apiVersion": "2016-09-01",
             "name": "[variables('hostingPlanName')]",
             "type": "Microsoft.Web/serverfarms",
+            "kind": "linux",
             "location": "[parameters('location')]",
             "sku": {
-                "name": "[parameters('hostingPlanSku')]"
+                "name": "[parameters('hostingPlanSku')]",
+                "numberOfWorkers": 1,
+                "reserved": true
             },
             "properties": {
                 "name": "[variables('hostingPlanName')]"
@@ -210,7 +213,8 @@
                             "https://portal.azure.com"
                         ]
                     },
-                    "use32BitWorkerProcess": "false"
+                    "use32BitWorkerProcess": "false",
+                    "linuxFxVersion": "Python|3.8"
                 }
             }
         },
