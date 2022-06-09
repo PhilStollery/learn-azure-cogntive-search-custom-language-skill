@@ -210,8 +210,7 @@
                             "https://portal.azure.com"
                         ]
                     },
-                    "use32BitWorkerProcess": "false",
-                    "linuxFxVersion": "Python|3.8"
+                    "use32BitWorkerProcess": "false"
                 }
             }
         },
