@@ -21,26 +21,6 @@
                 "description": "Storage Account type"
             }
         },
-        "hostingPlanSku": {
-            "type": "string",
-            "defaultValue": "B1",
-            "allowedValues": [
-                "D1",
-                "B1",
-                "B2",
-                "B3",
-                "S1",
-                "S2",
-                "S3",
-                "P1",
-                "P2",
-                "P3",
-                "P4"
-            ],
-            "metadata": {
-                "description": "The pricing tier for the App Service plan"
-            }
-        },
         "searchServiceSku": {
             "type": "string",
             "defaultValue": "standard",
@@ -75,38 +55,12 @@
         }
     },
     "variables": {
-        "hostingPlanName": "[concat(parameters('resourcePrefix'), '-plan')]",
         "storageAccountName": "[concat(parameters('resourcePrefix'), 'str')]",
-        "appInsightsName": "[concat(parameters('resourcePrefix'), '-app-insights')]",
         "searchServiceName": "[concat(parameters('resourcePrefix'), '-search-service')]",
         "cognitiveServicesAccountName": "[concat(parameters('resourcePrefix'), '-cognitive-services')]",
-        "functionAppName":"[concat(parameters('resourcePrefix'), '-function-app')]",
         "storageAccountId":"[concat(parameters('resourcePrefix'))]"
     },
-    "resources": [
-        {
-            "type": "Microsoft.Web/serverfarms",
-            "apiVersion": "2021-03-01",
-            "name": "[variables('hostingPlanName')]",
-            "kind": "functionapp",
-            "location": "[parameters('location')]",
-            "sku": {
-                "tier": "Dynamic",
-                "name": "[parameters('hostingPlanSku')]"
-            },            
-            "properties": {
-                "perSiteScaling": false,
-                "elasticScaleEnabled": false,
-                "maximumElasticWorkerCount": 1,
-                "isSpot": false,
-                "reserved": true,
-                "isXenon": false,
-                "hyperV": false,
-                "targetWorkerCount": 0,
-                "targetWorkerSizeId": 0,
-                "zoneRedundant": false          
-            }
-        },       
+    "resources": [     
         {
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
@@ -116,20 +70,6 @@
             "sku": {
                 "name": "[parameters('storageAccountType')]",
                 "tier": "Standard"
-            }
-        },
-        {
-            "type": "microsoft.insights/components",
-            "apiVersion": "2015-05-01",
-            "name": "[variables('appInsightsName')]",
-            "location": "[parameters('location')]",
-            "tags": {
-                "applicationType": "web",
-                "applicationName": "[variables('functionAppName')]"
-            },
-            "kind": "web",
-            "properties": {
-                "Application_Type": "web"
             }
         },
         {
@@ -153,45 +93,6 @@
             "properties": {
                 "apiProperties": {},
                 "publicNetworkAccess": "Enabled"
-            }
-        },
-        {
-            "apiVersion": "2021-03-01",
-            "type": "Microsoft.Web/sites",
-            "name": "[variables('functionAppName')]",
-            "location": "[parameters('location')]",
-            "kind": "functionapp,linux",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
-                "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
-            ],
-            "properties": {
-                "enabled": true,
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
-                "reserved": true,
-                "isXenon": false,
-                "hyperV": false,
-                "siteConfig": {
-                    "numberOfWorkers": 1,
-                    "linuxFxVersion": "Python|3.8",
-                    "acrUseManagedIdentityCreds": false,
-                    "alwaysOn": false,
-                    "http20Enabled": false,
-                    "functionAppScaleLimit": 200,
-                    "minimumElasticInstanceCount": 0
-                },
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": false,
-                "clientCertEnabled": false,
-                "clientCertMode": "Required",
-                "hostNamesDisabled": false,
-                "containerSize": 1536,
-                "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false,
-                "redundancyMode": "None",
-                "storageAccountRequired": false,
-                "keyVaultReferenceIdentity": "SystemAssigned"
-                
             }
         }
     ]
